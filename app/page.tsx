@@ -6,26 +6,27 @@ import React, { useState, useEffect } from "react";
 
 const steps = [
   {
-    title: "Simple Online Application",
-    content: "Our streamlined application process helps you get started in just a few minutes — no hassle, no long forms.",
+    title: "Easy Application for Support",
+    content: "We’ve made it simple for you to ask for help. Our quick online form takes just a few minutes to complete — no stress, no long paperwork.",
   },
   {
-    title: "Quick Review Process",
-    content: "We understand the importance of timely support. Applications are reviewed promptly, with feedback provided within 24 hours.",
+    title: "Fast & Compassionate Review",
+    content: "We know time matters. That’s why our team reviews every request with care and urgency — you’ll hear back from us within 24 hours.",
   },
   {
-    title: "Your Privacy is Our Priority",
-    content: "All your information is handled with care and protected by industry-standard security protocols.",
+    title: "Your Information is Safe with Us",
+    content: "We treat your personal details with the utmost respect. Everything you share is kept private and protected by strong security measures.",
   },
   {
-    title: "Fair & Transparent Evaluation",
-    content: "Every application is carefully considered to ensure support reaches those who need it the most.",
+    title: "Support That's Fair and Thoughtful",
+    content: "Every application is reviewed with empathy and fairness, so that assistance reaches those who truly need it most.",
   },
   {
-    title: "What to Expect Next",
-    content: "After submitting your application, we'll keep you updated on the status and guide you through the next steps.",
+    title: "We’re With You Every Step",
+    content: "Once you apply, we’ll stay in touch to update you on your request and help guide you through what comes next. You’re not alone.",
   },
 ];
+
 
 const TaxRefundPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -83,11 +84,11 @@ const TaxRefundPage: React.FC = () => {
 
         {/* Desktop Navigation */}
         <nav className="nav-menu hidden md:flex space-x-8 font-medium text-sm md:text-base">
-          <a href="/products" className="hover:text-green-500 transition duration-300">Products</a>
-          <a href="/benefits" className="hover:text-green-500 transition duration-300">Benefits</a>
-          <a href="/partners" className="hover:text-green-500 transition duration-300">Partners</a>
-          <a href="/about-us" className="hover:text-green-500 transition duration-300">About Us</a>
-          <a href="/help" className="hover:text-green-500 transition duration-300">Help</a>
+          <a href="/login" className="hover:text-green-500 transition duration-300">Products</a>
+          <a href="/login" className="hover:text-green-500 transition duration-300">Benefits</a>
+          <a href="/login" className="hover:text-green-500 transition duration-300">Partners</a>
+          <a href="/login" className="hover:text-green-500 transition duration-300">About Us</a>
+          <a href="/login" className="hover:text-green-500 transition duration-300">Help</a>
         </nav>
 
         <div className="hidden md:flex space-x-4">
@@ -132,9 +133,10 @@ const TaxRefundPage: React.FC = () => {
     <div className="flex items-center space-x-4">
       <img src="/submit.png" alt="Submit Application" className="w-12 h-12" />
       <div>
-        <h3 className="font-bold">Submit Your Application</h3>
-        <p className="text-sm text-gray-600">Provide details about your project and how it will create an impact.</p>
-      </div>
+  <h3 className="font-bold">Submit Your Request for Support</h3>
+  <p className="text-sm text-gray-600">Tell us about your situation and how we can help you move forward. Every story matters.</p>
+</div>
+
       <span className="hidden md:inline-block text-xl text-orange-500">➡</span>
     </div>
 
@@ -142,9 +144,10 @@ const TaxRefundPage: React.FC = () => {
     <div className="flex items-center space-x-4">
       <img src="/stopwatch.png" alt="Review Process" className="w-12 h-12" />
       <div>
-        <h3 className="font-bold">Receive a Quick Review</h3>
-        <p className="text-sm text-gray-600">Our team will assess your application and notify you of the next steps.</p>
-      </div>
+  <h3 className="font-bold">Get a Prompt & Caring Response</h3>
+  <p className="text-sm text-gray-600">Our team will carefully review your request and reach out with next steps—usually within 24 hours.</p>
+</div>
+
       <span className="hidden md:inline-block text-xl text-orange-500">➡</span>
     </div>
 
@@ -152,9 +155,10 @@ const TaxRefundPage: React.FC = () => {
     <div className="flex items-center space-x-4">
       <img src="/moneyhand.png" alt="Funding Disbursement" className="w-12 h-12" />
       <div>
-        <h3 className="font-bold">Access Your Support</h3>
-        <p className="text-sm text-gray-600">Once approved, receive your funding to bring your project to life.</p>
-      </div>
+  <h3 className="font-bold">Receive the Support You Need</h3>
+  <p className="text-sm text-gray-600">Once approved, you’ll receive the assistance to help ease your situation and take your next steps forward.</p>
+</div>
+
     </div>
 
   </div>
@@ -166,11 +170,12 @@ const TaxRefundPage: React.FC = () => {
   {/* First Section - Image on Right */}
   <div className="w-full md:w-1/2 text-center md:text-left">
   <h2 className="text-3xl md:text-4xl font-bold mb-4">
-  Empowering Your Vision for Impact
+  Supporting You When It Matters Most
 </h2>
 <p className="text-lg md:text-xl mb-4">
-  Traditional funding models can be limiting, but our support is designed to prioritize your mission. We assess your potential impact, not just financial history—making opportunities more accessible to those driving positive change.
+  We believe help should be within reach—no matter your financial background. Our support is built on trust, empathy, and your real-life needs, not just numbers. You're more than your circumstances, and we're here to walk with you toward stability and hope.
 </p>
+
 
 
     
@@ -201,10 +206,10 @@ const TaxRefundPage: React.FC = () => {
 <section className="flex flex-col md:flex-row-reverse items-center p-6 md:p-10 gap-8">
   <div className="w-full md:w-1/2 text-center md:text-left">
   <h2 className="text-3xl md:text-4xl font-bold mb-4">
-  Fast & Seamless Approval
+  Quick & Compassionate Assistance
 </h2>
 <p className="text-lg md:text-xl mb-4">
-  Need funding quickly to bring your project to life? Our streamlined process ensures your application is reviewed promptly. Even with limited financial history, you could receive approval within one business day—helping you focus on making an impact without delay.
+  When life gets overwhelming, fast support can make all the difference. Our simple process means your request is reviewed with care—often within one business day—so you can get the help you need without added stress or delays.
 </p>
 
     

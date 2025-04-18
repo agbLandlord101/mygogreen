@@ -233,7 +233,7 @@ const ProfilePage = () => {
                         ${accountData?.loanAmount?.toLocaleString() ?? "0.00"}
                       </p>
                       <p className="text-xs text-red-500 mt-1">
-                        Available for transfer to Greendot Card
+                        Available for transfer 
                       </p>
                     </div>
                     <div className="bg-red-600 p-3 rounded-lg">📈</div>
