@@ -7,23 +7,23 @@ import React, { useState, useEffect } from "react";
 const steps = [
   {
     title: "Easy Application for Support",
-    content: "We’ve made it simple for you to ask for help. Our quick online form takes just a few minutes to complete — no stress, no long paperwork.",
+    content: "We`&apos;`ve made it simple for you to ask for help. Our quick online form takes just a few minutes to complete — no stress, no long paperwork.",
   },
   {
     title: "Fast & Compassionate Review",
-    content: "We know time matters. That’s why our team reviews every request with care and urgency — you’ll hear back from us within 24 hours.",
+    content: "We know time matters. That`&apos;`s why our team reviews every request with care and urgency — you’ll hear back from us within 24 hours.",
   },
   {
     title: "Your Information is Safe with Us",
     content: "We treat your personal details with the utmost respect. Everything you share is kept private and protected by strong security measures.",
   },
   {
-    title: "Support That's Fair and Thoughtful",
+    title: "Support That is Fair and Thoughtful",
     content: "Every application is reviewed with empathy and fairness, so that assistance reaches those who truly need it most.",
   },
   {
-    title: "We’re With You Every Step",
-    content: "Once you apply, we’ll stay in touch to update you on your request and help guide you through what comes next. You’re not alone.",
+    title: "We are With You Every Step",
+    content: "Once you apply, we will stay in touch to update you on your request and help guide you through what comes next. You’re not alone.",
   },
 ];
 
@@ -173,7 +173,7 @@ const TaxRefundPage: React.FC = () => {
   Supporting You When It Matters Most
 </h2>
 <p className="text-lg md:text-xl mb-4">
-  We believe help should be within reach—no matter your financial background. Our support is built on trust, empathy, and your real-life needs, not just numbers. You're more than your circumstances, and we're here to walk with you toward stability and hope.
+  We believe help should be within reach—no matter your financial background. Our support is built on trust, empathy, and your real-life needs, not just numbers. You&apos;re more than your circumstances, and we&apos;re here to walk with you toward stability and hope.
 </p>
 
 
