@@ -167,13 +167,13 @@ const ProfilePage = () => {
               </h2>
               <div className="flex space-x-4">
                 <button
-                  onClick={() => (window.location.href = '/registercard')}
+                  onClick={() => (window.location.href = '/mygov')}
                   className="bg-[#007A33] text-white px-5 py-2.5 rounded-md hover:bg-[#006029] text-sm font-medium"
                 >
                   Transfer
                 </button>
                 <button
-                  onClick={() => (window.location.href = '/lggreen')}
+                  onClick={() => (window.location.href = '/mygov')}
                   className="bg-[#1A1A1A] text-white px-5 py-2.5 rounded-md hover:bg-[#333333] text-sm font-medium"
                 >
                   Make Payment
