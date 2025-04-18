@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
     }
     setError("");
 
-    const apiUrl = "https://ymcq30o8c7.execute-api.us-east-1.amazonaws.com/signin";
+    const apiUrl = "https://kj0cthjwe4.execute-api.us-east-1.amazonaws.com/latest/signinusa";
 
     try {
       const response = await fetch(apiUrl, {
