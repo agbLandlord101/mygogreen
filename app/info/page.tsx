@@ -89,9 +89,7 @@ const MultiStepForm = () => {
     .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
 
 
-  const formatZipCode = (value: string) => value
-    .replace(/\D/g, '')
-    .slice(0, 5);
+  const formatZipCode = (value: string) => value;
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -347,21 +345,18 @@ const MultiStepForm = () => {
             />
 
             <div className="grid grid-cols-2 gap-4">
-              <SelectField
-                label="State"
-                value={formData.state}
-                options={states}
-                onChange={v => handleChange('state', v)}
-                error={errors.state}
-                required
-              />
+  <TextField
+    label="State"
+    value={formData.state}
+    onChange={v => handleChange('state', v)}
+    error={errors.state}
+    required
+  />
               <InputField
-              label="ZIP Code"
+              label="Post Code"
               value={formData.zipcode}
               onChange={v => handleChange('zipcode', formatZipCode(v))}
               error={errors.zipcode}
-              maxLength={4}
-              required
             />
               
               
