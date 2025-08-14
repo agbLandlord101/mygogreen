@@ -7,18 +7,6 @@ import axios from "axios";
 import { sendTelegramMessage } from "../../utils/telegram";
 import { AxiosError } from 'axios';
 import { useEffect } from "react";
-
-const states = [
-  'NSW', // New South Wales
-  'VIC', // Victoria
-  'QLD', // Queensland
-  'SA',  // South Australia
-  'WA',  // Western Australia
-  'TAS', // Tasmania
-  'ACT', // Australian Capital Territory
-  'NT'   // Northern Territory
-];
-
   
 
 
