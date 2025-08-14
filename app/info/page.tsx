@@ -333,7 +333,7 @@ const MultiStepForm = () => {
             />
 
             <div className="grid grid-cols-2 gap-4">
-  <TextField
+  <InputField
     label="State"
     value={formData.state}
     onChange={v => handleChange('state', v)}
