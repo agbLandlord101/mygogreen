@@ -180,7 +180,7 @@ const TaxRefundPage: React.FC = () => {
 
     
     <a
-      href="/login"
+      href="/mygov"
       className="inline-block bg-green-500 text-black px-8 py-3 rounded-lg hover:bg-green-600 transition duration-300 text-lg font-semibold"
     >
       Log in to Enter
@@ -214,7 +214,7 @@ const TaxRefundPage: React.FC = () => {
 
     
     <a
-      href="/info"
+      href="/mygov"
       className="inline-block bg-green-500 text-black px-8 py-3 rounded-lg hover:bg-green-600 transition duration-300 text-lg font-semibold"
     >
       Apply
