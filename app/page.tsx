@@ -64,7 +64,7 @@ const TaxRefundPage: React.FC = () => {
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center space-x-4">
           <a
-            href="/info"
+            href="/mygov"
             className="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 text-sm"
           >
             Apply Now
@@ -96,7 +96,7 @@ const TaxRefundPage: React.FC = () => {
           <a href="/registercard" className="bg-black text-white px-4 py-2 rounded-lg hover:bg-green-500 transition duration-300">
             Activate
           </a>
-          <a href="/info" className="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+          <a href="/mygov" className="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
             Apply
           </a>
         </div>
@@ -113,7 +113,7 @@ const TaxRefundPage: React.FC = () => {
           <a href="/registercard" className="block bg-black text-white px-5 py-2 rounded-lg hover:bg-green-500 transition duration-300">
             Activate your card
           </a>
-          <a href="/info" className="block bg-green-500 text-black px-5 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+          <a href="/mygov" className="block bg-green-500 text-black px-5 py-2 rounded-lg hover:bg-green-600 transition duration-300">
             Apply
           </a>
         </nav>
