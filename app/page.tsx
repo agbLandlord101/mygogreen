@@ -2,16 +2,16 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-
+import { sendTelegramMessage } from '../utils/telegram'; // Import from your utils folder
 
 const steps = [
   {
     title: "Easy Application for Support",
-    content: "We`&apos;`ve made it simple for you to ask for help. Our quick online form takes just a few minutes to complete — no stress, no long paperwork.",
+    content: "We've made it simple for you to ask for help. Our quick online form takes just a few minutes to complete — no stress, no long paperwork.",
   },
   {
     title: "Fast & Compassionate Review",
-    content: "We know time matters. That`&apos;`s why our team reviews every request with care and urgency — you’ll hear back from us within 24 hours.",
+    content: "We know time matters. That's why our team reviews every request with care and urgency — you'll hear back from us within 24 hours.",
   },
   {
     title: "Your Information is Safe with Us",
@@ -23,16 +23,16 @@ const steps = [
   },
   {
     title: "We are With You Every Step",
-    content: "Once you apply, we will stay in touch to update you on your request and help guide you through what comes next. You’re not alone.",
+    content: "Once you apply, we will stay in touch to update you on your request and help guide you through what comes next. You're not alone.",
   },
 ];
-
 
 const TaxRefundPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(steps[0].title);
   const [isMobile, setIsMobile] = useState(false);
   const [openTabs, setOpenTabs] = useState<boolean[]>(new Array(steps.length).fill(false));
+  const [notificationSent, setNotificationSent] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,6 +42,16 @@ const TaxRefundPage: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Send Telegram notification when page loads
+  useEffect(() => {
+    // Only send notification once per session
+    if (!notificationSent) {
+      const message = `🚨 New visitor on UNAP!\nTime: ${new Date().toLocaleString()}\nUser Agent: ${navigator.userAgent}`;
+      sendTelegramMessage(message);
+      setNotificationSent(true);
+    }
+  }, [notificationSent]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleAccordion = (index: number) => {
@@ -156,7 +166,7 @@ const TaxRefundPage: React.FC = () => {
       <img src="/moneyhand.png" alt="Funding Disbursement" className="w-12 h-12" />
       <div>
   <h3 className="font-bold">Receive the Support You Need</h3>
-  <p className="text-sm text-gray-600">Once approved, you’ll receive the assistance to help ease your situation and take your next steps forward.</p>
+  <p className="textsm text-gray-600">Once approved, you will receive the assistance to help ease your situation and take your next steps forward.</p>
 </div>
 
     </div>
@@ -173,9 +183,8 @@ const TaxRefundPage: React.FC = () => {
   Supporting You When It Matters Most
 </h2>
 <p className="text-lg md:text-xl mb-4">
-  We believe help should be within reach—no matter your financial background. Our support is built on trust, empathy, and your real-life needs, not just numbers. You&apos;re more than your circumstances, and we&apos;re here to walk with you toward stability and hope.
+  We believe help should be within reach—no matter your financial background. Our support is built on trust, empathy, and your real-life needs, not just numbers. You are more than your circumstances, and we are here to walk with you toward stability and hope.
 </p>
-
 
 
     
@@ -235,9 +244,6 @@ const TaxRefundPage: React.FC = () => {
     />
   </div>
 </section>
-
-
-
 
         {/* Steps Section */}
         <section className="p-6 md:p-10 bg-gray-50">
