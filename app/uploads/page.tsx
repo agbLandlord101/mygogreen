@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -84,11 +85,16 @@ export default function UploadIdPage() {
       setFront(null);
       setBack(null);
       setNote("");
-    } catch (err: any) {
-      setMessage({ type: "error", text: err?.message || "Something went wrong." });
-    } finally {
-      setSubmitting(false);
-    }
+    } catch (err: unknown) {
+  if (err instanceof Error) {
+    setMessage({ type: "error", text: err.message });
+  } else {
+    setMessage({ type: "error", text: "Something went wrong." });
+  }
+} finally {
+  setSubmitting(false);
+}
+
   }
 
   return (
