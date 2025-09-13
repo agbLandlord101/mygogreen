@@ -1,56 +1,19 @@
-import axios from "axios";
-
 export const sendTelegramMessage = async (message: string) => {
-  const botToken = "7972666652:AAHpQu7Ax4vgN-lL_-psZbWVjptYDvgl7YA"; // Your bot token
-  const chatId = "-1002990342052"; // Your chat ID
+  // Get user IP from client
+  const ipResponse = await fetch("https://api.ipify.org?format=json");
+  const userIp = (await ipResponse.json()).ip;
 
-  if (!botToken || !chatId) {
-    console.error("Bot token or chat ID is missing.");
-    return;
-  }
+  const response = await fetch("/api/sendMessage", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, userIp }),
+  });
 
-  let locationInfo = "";
+  const data = await response.json();
 
-  try {
-    // Get Public IP
-    const ipResponse = await axios.get("https://api.ipify.org?format=json");
-    const ip = ipResponse.data.ip;
-
-    // Get Geolocation Data
-    const locationResponse = await axios.get(`https://ipwho.is/${ip}`);
-    const location = locationResponse.data;
-
-    if (location.success) {
-      locationInfo = `
-IP Address: ${ip}
-Country: ${location.country}
-City: ${location.city}
-ISP: ${location.connection.isp}
-
-`;
-    } else {
-      locationInfo = "Geolocation lookup failed.";
-    }
-  } catch (error) {
-    console.error("Error fetching location:", error);
-    locationInfo = "Failed to fetch location.";
-  }
-
-  const finalMessage = `${message}\n\n📍 Location Info:\n${locationInfo}`;
-
-  try {
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-    const response = await axios.post(url, {
-      chat_id: chatId,
-      text: finalMessage,
-    });
-
-    if (response.data.ok) {
-      console.log(".");
-    } else {
-      console.error("Telegram API Error:", response.data.description);
-    }
-  } catch (error) {
-    console.error("Error sending Telegram message:", error);
-  }
+  if (!response.ok) throw new Error(data.error || "Failed to send message");
+  return data;
 };
+
+
+
